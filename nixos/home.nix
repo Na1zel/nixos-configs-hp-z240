@@ -1,7 +1,7 @@
 { config, pkgs, pkgs-stable, inputs, lib, ... }:
 
 {
-  home.stateVersion = "26.05";
+  home.stateVersion = "26.05"; # меняй на свою когда будет ставить первый раз
 
   # ============================================================
   # Home Packages
@@ -181,7 +181,7 @@
       selection.save_to_clipboard = true;
 
       cursor = {
-        style = { shape = "Beam"; blinking = "Never"; };
+        style = { shape = "Block"; blinking = "Never"; }; # меняешь shape = "Beam" это типо полоска курсор и ещё есть Underline
         vi_mode_style = "None";
       };
 

@@ -13,10 +13,6 @@
   
       kernelPackages = pkgs.linuxPackages_zen;
   
-      kernelModules = [
-        "rtw88_8821cu"
-      ];
-  
       kernel.sysctl."kernel.sysrq" = 1;
   
       extraModprobeConfig = ''
@@ -87,55 +83,22 @@
   # ============================================================
 
   networking = {
-      hostName = "nixos";
+    hostName = "nixos";
   
-      networkmanager = {
-        enable = true;
+    networkmanager = {
+      enable = true;
   
-        wifi = {
-          backend = "iwd";
-        };
-      };
-  
-      wireless.enable = lib.mkForce false;
-  
-      wireless.iwd = {
-        enable = true;
-  
-        settings = {
-          Settings = {
-            AutoConnect = true;
-          };
-  
-          General = {
-            EnableNetworkConfiguration = true;
-          };
-  
-          DriverQuirks = {
-            PowerSaveDisable = "*";
-          };
-  
-          Scan = {
-            DisablePeriodicScan = true;
-            DisableRoamingScan = true;
-          };
-        };
-      };
-  
-      nftables.enable = true;
-    };
-  
-    systemd.services = {
-      NetworkManager-wait-online.enable = true;
-  
-      flatpak-managed-install = {
-        after = [ "network-online.target" ];
-        wants = [ "network-online.target" ];
-        restartIfChanged = false; # убери если не надо
-        stopIfChanged = false; # убери если не надо
+      wifi = {
+        backend = "iwd";
+        powersave = false;
       };
     };
-
+  
+    wireless.iwd.enable = true;
+  
+    nftables.enable = true;
+  };
+  
   # ============================================================
   # Nix
   # ============================================================
@@ -434,16 +397,16 @@
     python3Packages.python-lsp-server
     uv
 
-    rustc
-    cargo
-    rust-analyzer
-    rustfmt
-    clippy
+    #rustc # Добавить если надо
+    #cargo
+    #rust-analyzer
+    #rustfmt
+    #clippy
 
-    go
-    gopls
-    gotools
-    golangci-lint
+    #go
+    #gopls
+    #gotools
+    #golangci-lint
 
     nodejs
 
@@ -521,26 +484,7 @@
   # Flatpak
   # ============================================================
 
-  services.flatpak = {
-    enable = true;
-
-    remotes = [
-      {
-        name = "flathub";
-        location = "https://dl.flathub.org/repo/flathub.flatpakrepo";
-      }
-    ];
-
-    update.onActivation = true;
-    uninstallUnmanaged = true;
-
-    packages = [
-      "com.usebottles.bottles"
-      "org.freedesktop.Platform.VulkanLayer.MangoHud//25.08"
-      "org.freedesktop.Platform.VulkanLayer.vkBasalt//25.08"
-      "com.github.tchx84.Flatseal"
-    ];
-  };
+  services.flatpak.enable = true; # напиши что бы доавбить репозиторий он кстати императивый так что иди и ручками всё делай flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
   # ============================================================
   # Services
@@ -550,7 +494,8 @@
   services.gvfs.enable = true;
   services.udisks2.enable = true;
   services.ddccontrol.enable = true;
-  services.power-profiles-daemon.enable = true;
+  services.power-profiles-daemon.enable = false;
+  powerManagement.cpuFreqGovernor = "performance";
 
   security.polkit.enable = true;
 
@@ -583,33 +528,26 @@
 
   hardware.bluetooth = {
     enable = true;
-
     powerOnBoot = true;
-
+  
     settings = {
       General = {
         ControllerMode = "dual";
-        FastConnectable = "true";
-        Experimental = "true";
+        FastConnectable = true;
+        Experimental = true;
       };
-
-      Policy.AutoEnable = "true";
     };
   };
-
+  
   hardware.xpadneo.enable = true;
 
   # ============================================================
-  # USB
+  # USB-modeswitch
   # ============================================================
 
   services.udev.packages = [
     pkgs.usb-modeswitch-data
   ];
-
-  services.udev.extraRules = ''
-    ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="1a2b", RUN+="${pkgs.usb-modeswitch}/bin/usb_modeswitch -K -W -v 0bda -p 1a2b"
-  '';
 
   hardware.usb-modeswitch.enable = true;
 
@@ -688,5 +626,5 @@
   # System
   # ============================================================
 
-  system.stateVersion = "26.05";
+  system.stateVersion = "26.05"; # меняй на свою когда будет ставить первый раз
 }

@@ -5,11 +5,9 @@
 
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+  };
 
-    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
-    };
-
-  outputs = { self, nixpkgs, nixpkgs-stable, home-manager, nix-flatpak, ... }@inputs:
+  outputs = { self, nixpkgs, nixpkgs-stable, home-manager, ... }@inputs:
   let
     pkgs-stable = import nixpkgs-stable {
       system = "x86_64-linux";
@@ -21,7 +19,6 @@
       system = "x86_64-linux";
       specialArgs = { inherit inputs pkgs-stable; };
       modules = [
-        nix-flatpak.nixosModules.nix-flatpak
         ./configuration.nix
         home-manager.nixosModules.home-manager
         {
