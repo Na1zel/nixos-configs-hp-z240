@@ -150,28 +150,22 @@
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
-
+  
     extraPackages = with pkgs; [
       nvidia-vaapi-driver
     ];
   };
-
+  
   services.xserver.videoDrivers = [ "nvidia" ];
-
+  
   hardware.nvidia = {
     open = true;
     nvidiaSettings = true;
     modesetting.enable = true;
   };
-
+  
   environment.sessionVariables = {
-    LIBVA_DRIVER_NAME = "nvidia";
-    NVD_BACKEND = "direct";
-
-    __GL_SHADER_DISK_CACHE_SIZE = "4294967296";
-
-    __GL_GSYNC_ALLOWED = "1";
-    __GL_VRR_ALLOWED = "1";
+    __GL_SHADER_DISK_CACHE_SIZE = "8589934592";
   };
 
   # ============================================================
@@ -202,11 +196,11 @@
   environment.systemPackages = with pkgs; [
 
     # Theme / QT / GTK
+    caelestia-shell
+    caelestia-cli
     adw-gtk3
-    myman
     gnupg
     rusty-path-of-building
-    materia-kde-theme
     bibata-cursors
     kdePackages.qtstyleplugin-kvantum
     libsForQt5.qtstyleplugin-kvantum
@@ -228,12 +222,6 @@
     blender
     exfatprogs
     libreoffice-qt
-    kdePackages.kcalc
-    kdePackages.kontact
-    kdePackages.kmail
-    kdePackages.kmail-account-wizard
-    kdePackages.akonadi-import-wizard
-    kdePackages.isoimagewriter
 
     # Media
     yt-dlp
@@ -243,7 +231,6 @@
     libnotify
     imagemagick
     pulseaudio
-    kdePackages.filelight
     haruna
 
 
@@ -258,7 +245,7 @@
     pfetch-rs
     pipes-rs
     bat
-    btop-cuda # ставть просто btop если не nvidia
+    btop-cuda # ставить просто btop если не nvidia
     htop
     eza
     cmatrix
@@ -283,7 +270,6 @@
     fuse
     fuse3
     libusb1
-    android-tools
     file
     abootimg
     ntfs3g
@@ -294,8 +280,6 @@
     yazi
     tldr
     zellij
-    angband
-    bastet
     unrar
 
     # Gaming
@@ -626,5 +610,5 @@
   # System
   # ============================================================
 
-  system.stateVersion = "26.05"; # меняй на свою когда будет ставить первый раз
+  system.stateVersion = "26.05"; # меняй на свою когда будешь ставить первый раз
 }
